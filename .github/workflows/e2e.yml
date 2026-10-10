@@ -27,14 +27,15 @@ name: E2E (real DeepSeek API)
 #
 # Note: scheduled triggers are auto-disabled after 60 days of repo inactivity;
 # push/pull_request/workflow_dispatch act as backstops.
+#
+# DMC Labs fork: this workflow spends a capped DeepSeek API budget (about $10 a
+# month). It runs weekly and on manual dispatch only. The push and pull_request
+# triggers are removed so a sync push or a same-repo pull request does not spend.
 on:
   workflow_dispatch:
-  push:
-    branches: [main, master]
-  pull_request:
   schedule:
-    # 00:17 UTC nightly = 08:17 Asia/Shanghai — off the top-of-hour cron stampede.
-    - cron: '17 0 * * *'
+    # 07:17 UTC Sunday = 03:17 America/New_York. Weekly, off-peak, off the hour.
+    - cron: '17 7 * * 0'
 
 # Keep only the newest validation in each workflow/ref, including master
 # pushes, nightly runs, and manual dispatches.
